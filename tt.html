@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán - GadgetHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        .countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+        .payment-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+        .payment-status.success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        .payment-status.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl w-full space-y-8">
+            <!-- QR Section -->
+            <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                <h2 class="text-2xl font-bold mb-6">Quét mã để thanh toán</h2>
+                
+                <!-- QR Code -->
+                <div class="mb-8">
+                    <img src="efa58b38ee1c5d42040d.jpg" alt="QR Code" class="mx-auto max-w-[300px]">
+                </div>
+
+                <!-- Order Summary -->
+                <div class="border-t border-b py-4 my-6">
+                    <div id="cart-items" class="space-y-4">
+                        <!-- Cart items will be inserted here -->
+                    </div>
+                    <div class="mt-4 text-right">
+                        <div class="text-sm text-gray-600">Tổng tiền:</div>
+                        <div id="total" class="text-2xl font-bold text-indigo-600">0₫</div>
+                    </div>
+                </div>
+
+                <div class="border-t pt-4">                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mã đơn hàng của bạn:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="orderCode" readonly
+                                   class="px-3 py-2 border border-gray-300 rounded-md bg-gray-50 w-full">
+                            <button onclick="copyOrderCode()" class="p-2 text-indigo-600 hover:text-indigo-800">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">
+                            Vui lòng sử dụng mã này trong nội dung chuyển khoản
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Countdown -->
+                <div class="text-center space-y-4">
+                    <div id="countdown" class="countdown">05:00</div>
+                    <p class="text-gray-600">Đang chờ thanh toán...</p>
+                </div>
+
+                <a href="index.html" class="mt-6 inline-block text-indigo-600 hover:text-indigo-800">
+                    ← Quay lại mua sắm
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Status -->
+    <div id="paymentStatus" class="payment-status"></div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <i class="fas fa-check text-green-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Thanh toán thành công!</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">Cảm ơn bạn đã mua hàng tại GadgetHub.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" onclick="window.location.href='index.html'" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Khởi tạo biến
+        const slCK = "https://manhteky123-banking.hf.space/currentCK";
+        const layCK = "https://manhteky123-banking.hf.space/lastCK";
+        let slckhientai;
+        let checkInterval;
+        let isChecking = false;
+        let timeLeft = 300; // 5 minutes
+        
+        // Lấy sản phẩm từ localStorage và thiết lập giỏ hàng
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        let total = 0;
+        const cartItemsContainer = document.getElementById('cart-items');
+        const countdownDisplay = document.getElementById('countdown');
+        
+        // Tạo mã đơn hàng ngẫu nhiên
+        const randomCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+        
+        // Hiển thị sản phẩm
+        cartItems.forEach(item => {
+            total += item.price;
+            cartItemsContainer.innerHTML += `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img src="${item.image}" alt="${item.name}" class="h-16 w-16 object-cover rounded">
+                        <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">${item.name}</div>
+                            <div class="text-sm text-gray-500">${item.price.toLocaleString()}₫</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        // Cập nhật UI
+        document.getElementById('total').textContent = total.toLocaleString() + '₫';
+        document.getElementById('orderCode').value = `GH-${randomCode}`;
+        
+        // Lưu tổng tiền cần thanh toán
+        const totalAmount = total;
+        
+        console.log("Tổng tiền cần thanh toán:", totalAmount);
+
+        // Copy mã đơn hàng
+        function copyOrderCode() {
+            const orderCodeInput = document.getElementById('orderCode');
+            orderCodeInput.select();
+            document.execCommand('copy');
+            
+            const toast = document.createElement('div');
+            toast.className = 'payment-status success';
+            toast.textContent = 'Đã sao chép mã đơn hàng!';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        }
+
+        // Đếm ngược thời gian
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            countdownDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                window.location.href = 'index.html';
+            }
+            timeLeft--;
+        }, 1000);
+
+        // Lấy số lượng ban đầu và bắt đầu kiểm tra giao dịch
+        console.log("Khởi tạo kiểm tra giao dịch...");
+        fetch(slCK)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Dữ liệu ban đầu:", data);
+                slckhientai = data['currentCK'];
+                console.log("Số lượng hiện tại:", slckhientai);
+                startCheck(); // Bắt đầu kiểm tra sau khi có dữ liệu ban đầu
+            });
+
+        function startCheck() {
+            if (isChecking) return;
+            
+            console.log("Bắt đầu kiểm tra giao dịch mỗi 2 giây...");
+            isChecking = true;
+
+            checkInterval = setInterval(function () {
+                console.log("Kiểm tra giao dịch lần:", new Date().toLocaleTimeString());
+                fetch(slCK)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Dữ liệu từ API currentCK:", data);
+                        if (data['currentCK'] != slckhientai) {
+                            console.log("Phát hiện giao dịch mới!");
+                            slckhientai = data['currentCK'];
+
+                            fetch(layCK)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log("Giao dịch mới:", data);
+                                    var content = data['content'];
+                                    var amount = parseInt(data['transferAmount']);
+                                    
+                                    if (content.includes(randomCode)) {
+                                        console.log("Mã đơn hàng khớp!");
+                                          if (amount === totalAmount) {
+                                            // Xóa giỏ hàng
+                                            localStorage.removeItem('cartItems');
+                                            
+                                            // Hiển thị modal thành công
+                                            document.getElementById('successModal').classList.remove('hidden');
+                                            
+                                            // Dừng đếm ngược và hiển thị trạng thái thanh toán
+                                            clearInterval(countdown);
+                                            countdownDisplay.textContent = 'Đã thanh toán';
+                                            countdownDisplay.style.color = '#059669'; // màu xanh lá
+                                            
+                                            // Dừng kiểm tra API
+                                            stopCheck();
+                                        } else {
+                                            console.log("Số tiền không khớp:", {
+                                                received: amount,
+                                                expected: totalAmount
+                                            });
+                                            
+                                            const toast = document.createElement('div');
+                                            toast.className = 'payment-status error';
+                                            toast.textContent = 'Số tiền thanh toán không đúng!';
+                                            document.body.appendChild(toast);
+                                            
+                                            setTimeout(() => {
+                                                toast.remove();
+                                            }, 3000);
+                                        }
+                                    } else {
+                                        console.log("Mã đơn hàng không khớp:", {
+                                            received: content,
+                                            expected: randomCode
+                                        });
+                                        
+                                        const toast = document.createElement('div');
+                                        toast.className = 'payment-status error';
+                                        toast.textContent = 'Mã đơn hàng không đúng!';
+                                        document.body.appendChild(toast);
+                                        
+                                        setTimeout(() => {
+                                            toast.remove();
+                                        }, 3000);
+                                    }
+                                });
+                        }
+                    });
+            }, 2000);
+        }
+
+        function stopCheck() {
+            if (!isChecking) return;
+            console.log("Dừng kiểm tra giao dịch");
+            clearInterval(checkInterval);
+            isChecking = false;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gadget Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            padding: 20px;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+        h2 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 12px;
+            background-color: white;
+        }
+        .back-btn {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .back-btn:hover {
+            background: #cc5555;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Gadget Form</h2>
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSevMp42F9h4r6efgDzKQHdyei0GVz4KeZxXzZ0OzFXsgmkUlA/viewform?usp=header" allowfullscreen></iframe>
+        <button class="back-btn" onclick="window.location.href='index.html'">Quay về Trang Chủ</button>
+    </div>
+</body>
+</html>

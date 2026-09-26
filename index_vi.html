@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GadgetHub - Premium Phone Phụ kiện</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Menu styling */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #4f46e5;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .active-link {
+            color: #4f46e5;
+        }
+
+        .active-link::after {
+            width: 100%;
+        }
+
+        /* Language switcher */
+        .language-switch {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .language-switch:hover {
+            background-color: #f3f4f6;
+            border-color: #4f46e5;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+</style>
+</head>
+<body>
+<!-- Top Announcement Bar -->
+<div class="bg-indigo-900 text-white text-sm py-1 px-4 text-center">
+        🚀 Miễn phí vận chuyển cho đơn hàng trên 1,000,000₫ | Mã giảm giá: GADGET10 giảm 10%
+</div>
+<!-- Navigation -->
+<nav class="bg-white shadow-sm sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16">
+<div class="flex items-center">
+<!-- Logo -->
+<div class="flex-shrink-0 flex items-center">
+<i class="fas fa-mobile-alt text-indigo-600 text-2xl mr-2"></i>
+<span class="text-xl font-bold text-gray-800">GadgetHub</span>
+</div>
+<!-- Desktop Navigation -->
+<div class="md:flex md:space-x-8 hidden flex-col space-y-2 mt-2 md:mt-0 md:flex-row md:space-y-0" id="mobile-menu">
+<div class="md:flex md:space-x-8">
+<a class="nav-link active-link border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" href="#">Trang chủ</a>
+<div class="dropdown relative">
+<button class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">
+Danh mục <i class="fas fa-chevron-down ml-1 text-xs"></i>
+</button>
+<div class="dropdown-menu absolute hidden mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+<div class="py-1">
+<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Ốp điện thoại</a>
+<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Miếng dán màn hình</a>
+<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Sạc & Cáp</a>
+<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Tai nghe</a>
+<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#">Phụ kiện</a>
+</div>
+</div>
+</div>
+<a class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium" href="#">Hàng mới về</a>
+<a class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium" href="#">Ưu đãi</a>
+<a class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium" href="forms.html"><i class="fas fa-edit mr-1"></i> Biểu mẫu</a>
+<a class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium" href="about.html">Giới thiệu</a>
+<a class="language-switch text-gray-500 hover:text-gray-700 inline-flex items-center text-sm font-medium" href="index.html">
+<i class="fas fa-language"></i>
+<span>English</span>
+</a>
+</div>
+</div>
+</div>
+<div class="flex items-center md:hidden">
+<button class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700" id="mobile-menu-button">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+
+<!-- Right side icons -->
+<div class="flex items-center">
+<div class="flex-shrink-0 flex items-center space-x-4">
+<div class="relative">
+<button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none" id="search-btn">
+<i class="fas fa-search h-6 w-6"></i>
+</button>
+<div class="hidden absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-50" id="search-bar">
+<input class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Tìm kiếm sản phẩm..." type="text"/>
+</div>
+</div>
+<a class="p-1 rounded-full text-gray-400 hover:text-gray-500" href="#">
+<i class="far fa-user h-6 w-6"></i>
+</a>
+<div class="relative">
+<a class="p-1 rounded-full text-gray-400 hover:text-gray-500" href="#" id="cart-btn">
+<i class="fas fa-shopping-cart h-6 w-6"></i>
+<span class="cart-badge bg-red-500 text-white rounded-full">0</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Cart Modal -->
+<div aria-modal="true" class="hidden fixed inset-0 z-50 overflow-y-auto" id="cart-modal">
+<div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+<div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+<div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+<div class="sm:flex sm:items-start">
+<div class="w-full">
+<h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Giỏ hàng</h3>
+<div class="space-y-4" id="cart-items">
+<!-- Cart items will be inserted here -->
+</div>
+<div class="mt-4 border-t pt-4">
+<div class="flex justify-between">
+<span class="font-bold">Tổng cộng:</span>
+<span class="font-bold" id="cart-total">$0.00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+<button class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm" type="button">
+                        Thanh toán
+                    </button>
+<button class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" id="close-cart" type="button">
+                        Đóng
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Section -->
+<div class="gradient-bg text-white">
+<div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+<div class="text-center">
+<h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+                    Nâng tầm trải nghiệm di động của bạn
+                </h1>
+<p class="mt-6 max-w-lg mx-auto text-xl">
+                    Phụ kiện điện thoại cao cấp để bảo vệ, nâng cao và cá nhân hóa thiết bị của bạn.
+                </p>
+<div class="mt-10">
+<a class="inline-block bg-white text-indigo-600 py-3 px-8 rounded-md text-lg font-medium hover:bg-gray-100 transition duration-300" href="#">
+                        Mua ngay
+                    </a>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Danh mục -->
+<div class="max-w-7xl mx-auto py-12 px-4 sm:py-16 sm:px-6 lg:px-8">
+<h2 class="text-2xl font-bold text-gray-900 mb-8">Mua theo danh mục</h2>
+<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+<a class="group relative bg-white rounded-lg overflow-hidden shadow-sm p-6 text-center hover:shadow-md transition duration-300" href="#">
+<div class="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-indigo-50">
+<img alt="Ốp điện thoại" class="h-16 w-16 object-contain" src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&amp;fit=crop&amp;w=64&amp;q=80"/>
+</div>
+<h3 class="mt-4 text-sm font-medium text-gray-900">Ốp điện thoại</h3>
+<p class="mt-1 text-xs text-gray-500">Hơn 200 sản phẩm</p>
+</a>
+<a class="group relative bg-white rounded-lg overflow-hidden shadow-sm p-6 text-center hover:shadow-md transition duration-300" href="#">
+<div class="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-indigo-50">
+<img alt="Miếng dán màn hình" class="h-16 w-16 object-contain" src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&amp;fit=crop&amp;w=64&amp;q=80"/>
+</div>
+<h3 class="mt-4 text-sm font-medium text-gray-900">Miếng dán màn hình</h3>
+<p class="mt-1 text-xs text-gray-500">Hơn 150 sản phẩm</p>
+</a>
+<a class="group relative bg-white rounded-lg overflow-hidden shadow-sm p-6 text-center hover:shadow-md transition duration-300" href="#">
+<div class="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-indigo-50">
+<i class="fas fa-bolt text-indigo-600 text-xl"></i>
+</div>
+<h3 class="mt-4 text-sm font-medium text-gray-900">Chargers</h3>
+<p class="mt-1 text-xs text-gray-500">Hơn 80 sản phẩm</p>
+</a>
+<a class="group relative bg-white rounded-lg overflow-hidden shadow-sm p-6 text-center hover:shadow-md transition duration-300" href="#">
+<div class="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-indigo-50">
+<i class="fas fa-headphones text-indigo-600 text-xl"></i>
+</div>
+<h3 class="mt-4 text-sm font-medium text-gray-900">Tai nghe</h3>
+<p class="mt-1 text-xs text-gray-500">Hơn 120 sản phẩm</p>
+</a>
+<a class="group relative bg-white rounded-lg overflow-hidden shadow-sm p-6 text-center hover:shadow-md transition duration-300" href="#">
+<div class="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-indigo-50">
+<i class="fas fa-plug text-indigo-600 text-xl"></i>
+</div>
+<h3 class="mt-4 text-sm font-medium text-gray-900">Cables</h3>
+<p class="mt-1 text-xs text-gray-500">Hơn 90 sản phẩm</p>
+</a>
+</div>
+</div>
+<!-- Sản phẩm phổ biến -->
+<div class="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-bold text-gray-900">Sản phẩm phổ biến</h2>
+<a class="text-indigo-600 hover:text-indigo-800 font-medium" href="#">Xem tất cả</a>
+</div>
+<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+<!-- Product 1 -->
+<div class="product-card bg-white p-6 rounded-lg shadow-sm">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden aspect-w-1 aspect-h-1">
+<img alt="Clear Phone Case" class="w-full h-full object-center object-cover" src="https://th.bing.com/th/id/OIP.A4Ny7LZoGoGHLbvcE86ICwHaHa?w=187&h=187&c=7&r=0&o=5&cb=iwc2&pid=1.7"/>
+</div>
+<div class="absolute top-2 right-2">
+<button class="p-1 bg-white rounded-full shadow-md text-gray-400 hover:text-red-500">
+<i class="far fa-heart"></i>
+</button>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-sm font-medium text-gray-900">Ốp lưng trong suốt siêu mỏng</h3>
+<p class="mt-1 text-xs text-gray-500">Dành cho iPhone 14 Pro Max</p>
+</div>
+<div class="mt-4 flex justify-between items-center">
+<span class="text-lg font-bold text-gray-900">479,000₫</span>
+<button class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm hover:bg-indigo-700 transition duration-300">
+                            Thêm vào giỏ hàng
+                        </button>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="product-card bg-white p-6 rounded-lg shadow-sm">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden aspect-w-1 aspect-h-1">
+<img alt="Tempered Glass" class="w-full h-full object-center object-cover" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAsJCQcJCQcJCQkJCwkJCQkJCQsJCwsMCwsLDA0QDBEODQ4MEhkSJRodJR0ZHxwpKRYlNzU2GioyPi0pMBk7IRP/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCAC0AMMDASIAAhEBAxEB/8QAHAAAAQQDAQAAAAAAAAAAAAAAAAMEBQYBAgcI/8QAVhAAAgEDAgMDBAsMBgcGBwAAAQIDAAQRBSEGEjETQVEUImFxBzI0UnJzgZGSsbIVFiMkMzVCdKG10fBTVaLB0uEXJSZDY4LxREVig6XCVGR1k6SztP/EABsBAAICAwEAAAAAAAAAAAAAAAACAwQBBQYH/8QAOxEAAgEDAQQGBwcCBwAAAAAAAAECAwQRIQUSMVEGEzJBcbEUNGFygZHRFiJCUqHB8BXSIyUzYoLh8f/aAAwDAQACEQMRAD8A63SElzBE/I7ENgHZSdj6qXqIvT+MP6FQfszWj25tCps+266kk3lLX4k1GCnLDHvltp78/Rajy209+fotUTRXF/ay9/LH5P6lv0WBL+W2nvz9FqPLbT35+i1RNYxn19B8tZ+1t6/wx+T+oeiw5kv5bae/P0Wo8ttffn6LUgLGLlALNzd7A7Z9Api6lHdD1ViPmra321trWMI1K8IYlyy/g9SKFKlN4TZK+W2vvz9E0eW2vvz9E1E0Vq10svPyx+T+pJ6NAlvLbX35+ia2S5gkYIjZY5wMHu3qHpe0OLiH08w/smrVp0nuq1eFKcY4k0uD734izt4xi2iYooor0QohRRSJZ3ZsEqikrlcZYjrv4fz6wBaikcdPOf6ZoBKuuWYq2VIY587qOvy0ALUViigDNFYyPRWvLnfLjPcGI+qgDeitCgP6UnyO1ahnR1jclg4PIxxnI35Wx+z+cgCtFFFABUPfe6JPgp9kVMGoe+90yfBT6q5PpX6kveXkyzbds1itjIoctgHp3mstbSruuGHo6/NTqH8lF8EUpV3+gWEqKpOmuHHv+YvXTznJF95BBB9NFSLxxuPOUH09/wA9NntCN42z/wCFuvz1y970Tqw+9aS3lyej+fDyLMLlPtCi3zBcGMFx382AfSRTRmZizMcliST6TWGDIeVwVPp/jWBWg2jdX1Tdo3rf3eCax/74k1OMFrEzR4UVitSSBS9p7ph9bfZNIU4s/dMX/P8AZrYbNWbyl70fNCVOwyYqGv8AifhjTJHivdUs45kJDRdqrSKR1DAHY+umnGWoXFhpCx28skEuo3Udh5RCwWW3hMclxPLGSNmEaOFPcSD3VwQJFNK0/YxoZTlIlUFIkOyxrnwGASdz16nJ9vhBz0Rp28Hdvv8A+Cuv3Ui8eq/4qVTi7hdUQG/QZUN+j0fzx+l6a4G8MarIezT2rY80dfDYVYLi2P4tyR7iCAMFwrH8EmMj0U8qTiKpJnXfvv4V/rCP+z/io++/hXp90I/7P+KuNCCYEHsmOBg+cNz6DWXgnOxhZSN92HhUe6xsnZPvv4V/rCP+z/io++/hXI/H4/7P+KuNrayknMThdsEsuFGep76cXHYw27/goySBGARnrsAcb9M0yptmHLB1lOOeDGIUanCN8ZJXH7CTU7Z31hfwieyuYbiEnl54HDgN1wcbg+g15xjjgdwphiOwDcyqEVc9frqxcJX8mi6rG8LFYRdWkV0u4Wayup1tHWQHqY3eN4z1GWGcHAJU3FZBSyd1pOXrB8cv2WpSk5OsHxq/ZaoxhSiiigAqHvvdMnwY/qFS5qIvvdMnwU+oVynSv1Je8vJlm27Y4g/JRfBFKUnD+Si+CKUrqVwK5msVmsVlgYIVhhgCPAjNN3tVOTG3KfA7r/GnGawTVK5p0a8NyrFSXtHi2tUR7RyJ7ZTj3w3Hz1rUgTTd44zvjB9FcPfbBt8uVvLd9j1X1X6lyFaX4hvTiz90xep/s0iyFc94pay90x/Bc/srR2dtUoX9GM1+JeaJJyTg8ED7In5u0r9c1D9z39ceRFKRHoeVRgADzcY5s/z1rrnsixsbbRJQRypNrEZG+SZNJuiCPomuVLGpWLBOOzTBwMgBd8gb7fz6PaqHeaeoJOrFWJGyJjBXl2YHGSBmrI64KjpmC3B7/wDcp41X3RWD9wKvnY+bsevf6TVnlQBkXoOxtgCOgHYpU0mJEQVTgg55WABIHcMHG1ATGNtzv6cilVHf064Pjnrmt+Tm6nBbxbA33Bzjx/nfZMjYGxz0xjHfjpvUZf8AN20USMPMAZ2U4GWxjmPzVPdnyyAE5UZIAOCFUnOfDpmoW5ZkkmZkAErOccuOZTlQRjGwpomHoMmReVwrZcbnOFUArnA9PXHqrNgOWS4OesNmR4jGq2HU0kMu5eQhVUcxI3JB22Hj66Ws2UyTjBHLBZbk7n/WthWKnZYR4noz+JpOTrB8av2WpTx9ZpOTrB8av2WqmTClFFFABUPfe6ZPgp9VTFQ18fxl/gx/VXKdKvUl7y8mWbbtjmD8jD8EUpScP5GL4IrfNdPvJIgM1qTQTWuaq1K6SGUTJNaFqCaTJrTXF3glUcmxNaE1gmtCa5+4vMk0YGSaUsxi6HoV8fMKQJ2NL2fur/kf+6qlnU6y5pZ7px/f6DTWIvwK37I0jC10WLA5Xm1eQnfOU0m7Ax9I1y2MEJEBnHKpBPTBUd1dR9kVM22iPzLlZtYTl/SPNpN0eYegY39dc2jAMaZAwscX7FHSvWKTxk1UxBlxG6nGGRjk9w36GrO0ZflxhsQW/pIHYp41AlAFc4OCpK7A+ncMCKsojx2G4w0Vvs22B2KbtUrYqQiiqWJxkDB5TnLdARsP5+twLYlBJ5+xGASBgddu/bb56Vjj5TzKvmgYJJyBnuFOeaMRhjspTcsM8oABLde/1eFKMRV1G8aFlRihHIzJuVD9cD09Pl+as3gQsnLIGGHLHDZGTv128KseqXMZ7GJIwoVUIGThsFcKxJxy9Mj+GKgpRA7FVQbRhsqWKgjmJOBjx3GcD6miYZHKmWU9VYtz745RnpzEeo04shh5sgZNvZnIO5H3XsRvg04McBWUgMQRsrd642YkHr8/SkbVQkly5bC9jaElsDCrqunnJ9H8PmKjzFmI8T0T4+s0nJ1g+OX7LUp/E0nJ1g+NX7LVUJhSiiigAqGvvdL/Bj+oVMmoa/90v8GP6q5TpV6kveXkyzbds2Bwo9VVbi3iDVtLl0LTdIW38u1eYxrLdLzRxDtEhUBTtkltyQcAdN9rLnaqJxkyJxJ7H0shVYo7uNnZ2CoFW9hJLMdgPGqFtXVW4UHqsP9EySSwsm9hxXxEh4wsNSS0l1DQbG7u4biGN1t5HgYRlHUcoIyQQQFPX5J/hnVr3WdGttQuxCs8s10jLbqyRhYpmjXCsxPdvvVMGr69czeyBpd9qvl9rZaFqbQtGkKxF1ljQMvZrnYEj2xqb4F1DS4tC020lvrNLrt79/JmmQTle2kl/JZ5ugJ6VFtOji3lOMFvZjwzwcc8lgKb1xkT1DjHULXiYaXHFaHS4tRsNPuZ2SQziSdF58Sc/LkEnHm/o074i17WLXVdH0HSPI473UFEjXN+SYUDM6oijcZPKc7HqABvXOLm7vLzTtcu1sLpvKdfXVG1EA9hC6pIq25OMc2XB9t4bVctfk4f4guNAsLntrW/vdNhv7LUy0ItY1njaXsZwzAlSVI7sE7HuaarYUaVWk5Qykmn36pL7zXf4cTCm2nqP7binWIdB1vUNV0147/S5UtlQxzQQXTysI0flbfAOebB7hjHNs30fXuL5L3RE1O2trnT9ZthcQ3OnwyclnzBsLLIg5MgjDA5xnrtgx+j64X4X4gXXo59Ts7G6h08MjgySxTgco7VyCeU4KnOdx4U30SR9G4i0Sx0zUjd6TrcCXDW7SK7QLJE8gEwTzBKhG5AGR1FV5WNJQuE6S3lnHHGFFPR9zXH9Bt95Wp0unen/l2+Lb6xTSnen/AJd/ij9oVzmxVm/o+JPW7DK97Iv5s0v9c1A/+j39U5Iee3tlRAZBDF5y43yoP871cPZF/Nmmfreo/ua/qDs4wYLcDlyYYRt6EXc5Fex72DXQjnQg2idFKP5vmncBvM+fvqyLIqOmxIMUOACTk9kveKSntoZEbA3RCZG3BIAPj3055RHIOQZKwxE+1AB5FGAdxTKeQdNo3TsCRHJEV5iCHUBn5h44FV3VlEtwQgbEYAPOAql/bHJq2wTtIZC0SlbeLtJXiQZwMMS57t/nqv3ivNK0qDPa4J5G3LE5JcftoUsMy45RWRBPkAggZ22yC23jSciEDDDlIPm+237wAPE+OanZIlYHflPM2Peg+sd3f/1qPmVcuRjm5eUlug6ecpPefCrEZZK844IzlILN3jB2AITORghhWbYDtZ8Z9z2fXH9bWA2IrLgqT+lvvhvNOPVW1uh7SYcoBENpncZB+6tgSCKafZEjxPQv8TScnWD41fstSn8TScnWD45fstVQmFKKKKACoa/90v8ABj+qpmoe/wDdL/Bj+quV6Veor3l5Ms23bEs7VH6ppGkazFHBqNss6ROXiPM6SRswwSjxkMM9+++PRs+orz6V1OnPfg8Nd6Lu6msEPb8M8M2q3KW+nQxrc2Z0+4CPN+FtiQxRjz5ySASevppKHhLhO3kE0GmRxyKsiBlmuchZEaNhvJ3gkfLU5RSPaF1r/iS19rG3I8iMj0HQY9Ol0hLJBp0snayW/PLys/Mr8xYtz5yB+l3Uld8M8N3ttY2dzYq0NjH2VpyyzLJFFnPZiRW5yvoJNTNFJG9uYveVR5zni+PDPiZ3Y8hhDo+jW9hJpcVlAthIrLLByllk5sZLliWJ2G5Odh4bN9N4c4d0iV7jT7FIp3UqZXeWWQKeqq0rHAPfipesUel192Ud94lx1eviG7HkFPNOx20vxf8A7hTOnmnflZT/AMMfaq/sNf5hS8f2Iq3YZXPZGONL03v/ABrUf3Nf00sbQJbWUh6PDCqDmG5Ea74p17I/5r039a1H9zX9MYFmFvaBmGBDCQozthF699evT4FOgsthd8vMwDEqynGCASe/NKunaOMAY5IxvtsUXY/9K0dFcscAZ80A+B7j03qXSBUQO+MmONeUjzt1AznrSxZPNEDKskOObnAl81wMYKr821IMJwrPExA5ML5xBSPOcE7bHp3ZJ+eRvIXDbYIJ80uc7eGPrphPzKApzgAqAD13zykU+9kTcwiNHm+cA4UAkhsHY7EkMOnj/OYy5jUHbJXB3U5Xbfb/AD/yErcDAJDjPKE5UJB2AO//AEqMuFJJ5f0gW2HXck4HyVYplOpyGEnNhic5YnOMjJHXrWtntJc5IBMNoTsM/nSxFKOCM5G3tc7eJOxNaRgc8u24htAe7/vaw2x1/n0VLPskMeJ6D8fWaTk6wfGr9lqU8fWaTk6wfGr9lqqkwpRRRQAVVda17h7T797a91KCC4EULmKRZi3KwyD5iEb+urVXFOPiicZpI87wItrYs00ac7xgJJuq957vlrXbSsIX9HqqjaWc6fxklObhLKLOeJOGGaUjiS0Ad3K+dcgx8xycbYz3b9KwOIeHOn3y2TecTkyTA8pTlA9r3HcVz7yyOKS1mGqWcjhpIH7DTQsghlVXaSUyrysQQFHU9fGlluE5lK6xo6iK4gnDfcyZBzxvzqRyjmIOMt/JrnXsCj+aXyX9pZ65l/8Avh4bYKp4ns+YBxlJGUtl8gsMdQNj/d0rYa/w7ykNxHZkgDDCaUEkAgZGMbVzuaeGZFibUdKC3RWO4a105oJUTkZiXcjxVR3+2zUfLYWKIzx6xaSEAFYxDcq5ywUjzhy5AyevdRHo9Qa+9OS+C/tMddI6ovEHDmMPxBZf7s5WefI5SCRjAG+D3d/orMOvcPmeH/aCzk5mWNYVeVgzuCgwWGckkH/pXLTY6YzScmswqgLdmZ7W4VmC59sELde710Q2trFdaW0WoQ3DnUbBTHHDKjDM6ZYs3m48PX82ZdHrbdeJy+S+gdfLkdtubi2s4J7m7mSC3gAM0spIVAWCDOAT1IHSor76eEv65svnl/wVjjLbhniEjGeygxnpnyqKucJpelFVYxK58nWTlFxqSsXwO7ssb92/y1odk7HoXlB1arknnGmOS+pLUqSi8I6P99fCP9c2nyCc/VHUtoOs6JqdxdRaffRXMkUKSSLGso5VZ+UEl1AricmkJGpeTU4FQAEu1rd4GTygYUE5+Srr7FkaJq/EipKsyJY2arKquiuDM5yFkAYfLXUWPR+1t60a1OUm48+HkV51pNYZY/ZH/NWnfrWpfua/pvGkZgtFUYPk9tuvh2S7AUv7JH5q079Z1L9zX9KWkIe3sjgnFvb5OP8AhqSNq6Kr3DW3FhBbJzIzsx2DZB2wRuCalpFUlj3YUdRykgDGPRTcxp2TqowQSFxscYzsRS0zNHGoxnZSPVgdxqNMmlxIy4CgjfcBtiAfRUTKq8wLxhxkFl3xjpjK79KlpmBK7jp34Axv3VE3RwNhnHhv8gplxCS0Iq5MfncpI5cjHXPq2BqNccwIPTu9fgDUhcKWDDc4JOds795PWmboSCebGBnGMfJ0q1B6FOcSOcY5gcncnBOwJ22pFFIklyOkVqP/AFXTzTyQEg/tGNx44zTfADN1B7K2ztscarp/Q1NJ/dK+NTv/AI+s0nJ1g+NX7LUp4+s0nJ1g+NX7LVXHFKKKKACuJeyHDc3PF4traJ5bi4tNPigiT2zuwfAGdvWe75K7bXMNXmtoPZKsnuCqiTTY7aJn2CzzROqbnx3UfC9NV7mq6NGdWKy0m8c8DRWWkQkfsb6wYBJJqNkk5GeyEMzxA+9M4I+fkqAtuHNXn1eTRGWK3vUSaRjcM/Y8sah8q8anIYEFTirzfaNxbNxXBqUN1y6dHNbur+UFRBbIFElt5P383nDpg82SaczzW8nHemRx4M1tod3Hckfou/4VEPpAI+euQo7YulFt1IzzBy0XZa7n/wB6lp0o8sanM9R0+fS728sZ3jeW0fkkaHmKMeUPleYA9/hUhfcN6lp2lWGrTzWjW98bcQpC0hlXt4WnXnDIF2A33qz65wZrmp6rqt7bzaesN3LzxiaWZXC9mqecFjI7vGnfGEElrwpoNpIVL21zYW8hTJUvFZyISpIBxtttWyhtmNWVvTpTTlJreXw+pH1WE8o5py7HNL2C/wCsNK/+oWH/APRHWvKac6eoOo6QPHUtPH/5EddFW/05eDIVxOs8XKr8PayjHCubNCc42N5COpqhXumaImh9tGIDeKjmRUjCiFgvNzqwXJx03O/pzVy4ruHk0DiFHACqlscAe1/HYgBzBznI36DHy1QEit4bZBqE8k7mURi0VpJnEgRZCkcCHHmgjmZs7nAHm5PI9HoONq8vhLu8EWq3aNhoOmg35iae+lguXhS3t5Ut3AD2qnmkkQg8odiSBjbwFWj2MYo4dY4riilEsUUNtFFKMYlRLiZVcY23AzVTvdFlWA3AsZrZOyEkflKJbPId2MfkzuW2GCGXY56eFq9ipfx7iRv/AJTTh88k5rprZuWZb+9/PYVpadxP+yR+atP/AFnU/wBzX9SllGwtLPA2a2ttt857Jd6i/ZI/NOn/AKzqf7mv6mLEnySx9NtbfJ+CWpK3cTUO837MrjYDlXG9azHJJPhjfoRt0FLOQB37D9tNpsczE9Nu/wBG1RZLCTbI24CdebqCp67fLUTccoBOQSNyAOmdxg/XUvNk/JkgbYx8tRrwsS2ASBkkjbC+NMmSuJGlARuMbY8BTeaEdQMjYkZzv39KkezckkeAJ7sjIHKKSkjxnoc9DUilgjcCGkhO5AyOgxjYUymQKw2P5K3/AHrp2KnJItzgYz3Coq9UqUO+CkI78bapptTRnlFSpTxqdy/iaTk6wfGr9lq38fWa0k6wfGr9lqCAUooooAK4n7JC/wC00p8bCy/94rtlUfiXhPStZ1Rry6uL1WMFvE0cLRLGyR5285C2+SDvVO8vKVlT62s9OHMeEXJ4RFcO32o2HDU+sazdz3EXJ2tjDOwLCAfg4U5iOYmRvEnbFV3hCee74p8quH557i31OaVvF3Cscejwq9avoltrFta2clxc21rbOHWK07JVYqnZoG7RW2UZ5R6fmaaTwlpuj3qX0FzeySLFNEEnMPJiUAE+YgOdtt64KntGzVC4lLSpVzolol3L6lxwllckVLiTWtftta1qC31S+hhinKxRxTuqIvZqcKBU7xIfKOGeFTcySHt7vSzcSDLynntGLvsCS25PQ081Hg3TNSvL29mvL9JbuQyOsXYcikqFwvNGT3eNSV5otveWOl2BubqFdNkt5IJYDH2peCIwqW51K9N+nWpZbSsl6M6ejh2tPZj46mFCeue85gljoxwTq7YbtWAjsZ5GCqMjmG3ynp9dN9PVfuppXKSV+6diA2MHl8pTBNdNHDajAGr6oOVWUYWxGzdTtB19Nbpw7GphL6pqUiRPA/ZuLMKwhkEqqxWENjIGd62r6Q2+61vN5/nITqWIcWI66Brp7KFFfyfePqWa9jPnD5Mk9/htVSj1iSGCHyOMRmYh3kjVLcSXDnDLNcxI0obu3KggA53roup2EGqWVxYzvKkU5iZ2hKiQdm4kGC4I6jwqvJwLo8R5o7/V0bpzRzwoSPAlYq1Gy9o2tG3dO445zw9iRJUhJvMSlTT3HJ5RN2SoWllygYmaRkxHGsk2ZWGW52OcDGOp3tnsVLi44l9EGmD+3cU4fgTQ5WLy3mrSOerSXMZOPDJizVj4V4f03Q21I2b3Tm6FsJTcyK+BF2nLy8qr745rqLLbFpWmqFLOX7CvOnJLLI72SfzTYfrOp/ubUKmLUYtLHH/wtsR/9pah/ZJ/NOn/AKzqX7m1CpW1Yi1sgenktt/+pa2ly8JDW6y2Lnm3JznxpKbBzv3Aj5QN63Zsj+e+k25gpZ1/Brk87HlCjqTzHbFVVIupDR4wQ7cwz0xg5Iz1602lhYcwI6Zz0/ura81G0twBHHJcSYZuWB0PLtkDIG5Pd3emqxccSLNKtstvfCQBn/ASRRLzqcBRJIoBPp3HpPSp4RlIxOoo8SwRP5MzuIkfKPGBIAQARgkemoydoowHmdUU5xzEDPf5uf203imvG7V5hdeeWIE96HA2wAAseAPV+3NYNlbSdnLPeyMkYkYxuVOCdyzSyKTg7eHQVLjHFiObaykaG7tC/KrhmwMrsG3HUgfsqL1IqTDgNjlixkY/7002nsd1paM6wQSDJ85o5om5j74tyU2v5oJXgDxXIUiNUJli3/1np25HZ+r5PXtMlgqzm5LU7V4+s0nJ7aAd/aZ+QKc1se03wV6nqD/GsKmGLsxZ8YBOAFHgoFMVzeiiigANRF97oPwE+qpc1EX5/GD8BPqrmOk/qX/JfuWLftkfcMVCHDEEOCVUuVJxjCjx6fzsRBxHNzYBJJVU5uVcoPNUtud6UIQ4zjbpv/Cgcq7DGPWT9debb63d0v4G0LTG5uOZXETPAbYGNFEaJHyuCyuSeY+duB4UpKJDJlcYzGMMZAMb5PmfxpRVjU5BPynp6qyQhJJAz0p3UTllIMGFyIowdyCvNzA9ObvA3xWltz487mzmbPPjmx2nm5Kjlx730dd6U8zHKcYoXs16Y+U5+uhS0a5hgjbya+E9uLeKblju5TdZiLLNbGNgojOOvMQfk+SpOU7LtnrnbIzjvrUrETk4znx+sVsSpGDj56lnVUlFJYwYwYi/S27l7sb7/wCVSendZ/8Ak/vqNBUDAPT+e+pLTf8AtB9Kf31t9ha7Qp/HyZDW7DK77IVvLPpFiUUlU1AwyHuQXtldaejMfDnkQfLT7Sp4r3TNJuIfOSeyt2AAyQyxhHQjxUgqR4g1O3dpaX1tc2d3Ck1tcxtDPE+eV0bYjbf1EHI691UkcDa9Zrfw6VxVcw2l1O0z2t3apOjFgM80iurcx/SIA5upya9KrUusSwVKdTcYprmvR6crW1g0c2qyEqgA7SK2xjmeTlyCwHtVwd+vTBpsNpqjSz3V/dyyGaUO3lUxJf1LuB6s93TuFjj4F4riDdnrelJzbsV0vBJ9PnVhuBOLGbmbXtNZvE6c3+Os06fVrCHlUUnlkDfWtuWkEwuJE7JLibEhjjQBuzQKQe0PXcbDGB6sxXdjEiiIRRnlAGAA+AABzE5P7anp+BOK7hI45Nc0vlSRpfN0wgs5Xlyx5t8d3hTJ/Yz4ieUSnX7MNyGPAs5AnKf/AA8+M+mpIx0xIV1MPMRi05cZUls94z19GKYXVp2/nX14/YIUK2+URObBwxRRknvGelWYcAcUqqomu6aiKoRVTT2AA6Y9vmkP9GvEZd3bX7FuZucq9i5X2oXGC/TAFZisCym5cSvWsFnavBGnNHBI2WclpGIJALbkk02sZbrV9VW2BYp5bp+nwIqELG8uow3JHKN8qkLM59Hh1tX+jPiB5ZJH4jtozKixs8Ni5ZVUbcgMgA+QirLwxwNpvDcpuTdTXtygkFs86JGlsJVCytGi589sAFiScAAYGeZnqJnTBbqKKKwYCiiigDFaPDA55njRjjGWUE0UUk4RmsSWUGcGvk9r/QxfQFZ7C3/oo/oiiio1b0lwgvkjO8+Ydhb/ANFH9EUeT239DF9AUUVnqKX5V8gyw7C2/oYvoLWeyhH+6j+itFFZ6mmvwr5Blm3JH7xPoijlT3q/MKKKbcjyDIcq+9X5hWcAdAB6qKKbdSMGaxRRWQCiiigDNYoooAKKKKAM1iiigAooooAKKKKAP//Z"/>
+</div>
+<div class="absolute top-2 right-2">
+<button class="p-1 bg-white rounded-full shadow-md text-gray-400 hover:text-red-500">
+<i class="far fa-heart"></i>
+</button>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-sm font-medium text-gray-900">Kính cường lực 9H</h3>
+<p class="mt-1 text-xs text-gray-500">Dành cho Samsung S23 Ultra</p>
+</div>
+<div class="mt-4 flex justify-between items-center">
+<span class="text-lg font-bold text-gray-900">299,000₫</span>
+<button class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm hover:bg-indigo-700 transition duration-300">
+                            Thêm vào giỏ hàng
+                        </button>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="product-card bg-white p-6 rounded-lg shadow-sm">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden aspect-w-1 aspect-h-1">
+<img alt="Wireless Charger" class="w-full h-full object-center object-cover" src="https://th.bing.com/th/id/OIP.5k1N_wLi38Z9rkPO-BX3sQHaHa?w=180&amp;h=180&amp;c=7&amp;r=0&amp;o=5&amp;cb=iwc2&amp;pid=1.7"/>
+</div>
+<div class="absolute top-2 right-2">
+<button class="p-1 bg-white rounded-full shadow-md text-gray-400 hover:text-red-500">
+<i class="far fa-heart"></i>
+</button>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-sm font-medium text-gray-900">Bộ sạc không dây nhanh</h3>
+<p class="mt-1 text-xs text-gray-500">Được chứng nhận Qi 15W</p>
+</div>
+<div class="mt-4 flex justify-between items-center">
+<span class="text-lg font-bold text-gray-900">699,000₫</span>
+<button class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm hover:bg-indigo-700 transition duration-300">
+                            Thêm vào giỏ hàng
+                        </button>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="product-card bg-white p-6 rounded-lg shadow-sm">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden aspect-w-1 aspect-h-1">
+<img alt="Wireless Earbuds" class="w-full h-full object-center object-cover" src="https://th.bing.com/th/id/OIP.W2uMzjsyyGuo49z_EBx37wHaHa?w=174&amp;h=180&amp;c=7&amp;r=0&amp;o=5&amp;cb=iwc2&amp;pid=1.7"/>
+</div>
+<div class="absolute top-2 right-2">
+<button class="p-1 bg-white rounded-full shadow-md text-gray-400 hover:text-red-500">
+<i class="far fa-heart"></i>
+</button>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-sm font-medium text-gray-900">Tai nghe không dây chuyên nghiệp</h3>
+<p class="mt-1 text-xs text-gray-500">Chống ồn chủ động</p>
+</div>
+<div class="mt-4 flex justify-between items-center">
+<span class="text-lg font-bold text-gray-900">$79.99</span>
+<button class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm hover:bg-indigo-700 transition duration-300">
+                            Thêm vào giỏ hàng
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sản phẩm đã qua sử dụng -->
+<div class="bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h2 class="text-2xl font-bold text-gray-900">Sản phẩm đã qua sử dụng</h2>
+<p class="text-gray-600 mt-1">Phụ kiện đã qua sử dụng chất lượng với giá tốt</p>
+</div>
+<a class="text-indigo-600 hover:text-indigo-800 font-medium" href="#">Xem tất cả</a>
+</div>
+<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+<!-- Used Product 1 -->
+<div class="product-card bg-white p-6 rounded-lg shadow-sm">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden aspect-w-1 aspect-h-1">
+<img alt="Used iPhone Case" class="w-full h-full object-center object-cover" src="https://th.bing.com/th/id/OIP.73FQWK9CMxcjvFnx8_dMpgHaHa?w=196&amp;h=197&amp;c=7&amp;r=0&amp;o=5&amp;cb=iwc2&amp;pid=1.7"/>
+<div class="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-md text-xs">
+                                Đã qua sử dụng - Tốt
+                            </div>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-sm font-medium text-gray-900">Ốp lưng da iPhone 14 Pro</h3>
+<p class="mt-1 text-xs text-gray-500">Mặc ít, 3 tháng tuổi</p>
+</div>
+<div class="mt-4">
+<div class="flex items-center">
+<span class="text-lg font-bold text-gray-900">600,000₫</span>
+<span class="ml-2 text-sm text-gray-500 line-through">300,000₫</span>
+<span class="ml-2 text-xs text-green-600">50% giảm</span>
+</div>
+<button class="mt-2 w-full bg-indigo-600 text-white px-3 py-2 rounded-md text-sm hover:bg-indigo-700 transition duration-300">
+                            Thêm vào giỏ hàng
+                        </button>
+</div>
+</div>
+<!-- Used Product 2 -->
+<div class="product-card bg-white p-6 rounded-lg shadow-sm">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden aspect-w-1 aspect-h-1">
+<img alt="Used AirPods Pro" class="w-full h-full object-center object-cover" src="https://th.bing.com/th/id/OIP.FNCgxsLghwwMOAPuLY4lBgHaDs?w=302&amp;h=174&amp;c=7&amp;r=0&amp;o=5&amp;cb=iwc2&amp;pid=1.7"/>
+<div class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-md text-xs">
+                                Đã qua sử dụng - Như mới
+                            </div>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-sm font-medium text-gray-900">Vỏ AirPods Pro</h3>
+<p class="mt-1 text-xs text-gray-500">Ít sử dụng, hộp đầy đủ</p>
+</div>
+<div class="mt-4">
+<div class="flex items-center">
+<span class="text-lg font-bold text-gray-900">720,000₫</span>
+<span class="ml-2 text-sm text-gray-500 line-through">400,000₫</span>
+<span class="ml-2 text-xs text-green-600">45% giảm</span>
+</div>
+<button class="mt-2 w-full bg-indigo-600 text-white px-3 py-2 rounded-md text-sm hover:bg-indigo-700 transition duration-300">
+                            Thêm vào giỏ hàng
+                        </button>
+</div>
+</div>
+<!-- Used Product 3 -->
+<div class="product-card bg-white p-6 rounded-lg shadow-sm">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden aspect-w-1 aspect-h-1">
+<img alt="Used Wireless Charger" class="w-full h-full object-center object-cover" src="data:image/jpeg;base64,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"/>
+<div class="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-md text-xs">
+                                Đã qua sử dụng - Tốt
+                            </div>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-sm font-medium text-gray-900">Bộ sạc không dây Samsung</h3>
+<p class="mt-1 text-xs text-gray-500">Có trầy xước nhẹ, hoạt động hoàn hảo</p>
+</div>
+<div class="mt-4">
+<div class="flex items-center">
+<span class="text-lg font-bold text-gray-900">350,000₫</span>
+<span class="ml-2 text-sm text-gray-500 line-through">200,000₫</span>
+<span class="ml-2 text-xs text-green-600">42% giảm</span>
+</div>
+<button class="mt-2 w-full bg-indigo-600 text-white px-3 py-2 rounded-md text-sm hover:bg-indigo-700 transition duration-300">
+                            Thêm vào giỏ hàng
+                        </button>
+</div>
+</div>
+<!-- Used Product 4 -->
+<div class="product-card bg-white p-6 rounded-lg shadow-sm">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden aspect-w-1 aspect-h-1">
+<img alt="Used Power Bank" class="w-full h-full object-center object-cover" src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&amp;fit=crop&amp;w=500&amp;q=80"/>
+<div class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-md text-xs">
+                                Đã qua sử dụng - Như mới
+                            </div>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-center">
+<span class="text-lg font-bold text-gray-900">1,900,000₫</span>
+<span class="ml-2 text-sm text-gray-500 line-through">2,500,000₫</span>
+<span class="ml-2 text-xs text-green-600">24% giảm</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Phụ kiện bán lẻ -->
+<div class="bg-white py-12 px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h2 class="text-2xl font-bold text-gray-900">Phụ kiện bán lẻ</h2>
+<p class="text-gray-600 mt-1">Dây sạc, cáp dữ liệu giá siêu rẻ</p>
+</div>
+<a class="text-indigo-600 hover:text-indigo-800 font-medium" href="#">Xem tất cả</a>
+</div>
+<div class="grid grid-cols-2 gap-y-10 gap-x-6 sm:grid-cols-3 lg:grid-cols-6 xl:gap-x-8">
+<!-- Dây sạc 1 -->
+<div class="product-card bg-white p-4 rounded-lg shadow-sm border">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden">
+<img alt="Dây sạc Type C" class="w-full h-32 object-cover" src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&amp;fit=crop&amp;w=200&amp;q=80"/>
+<div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs">
+                                Siêu rẻ
+                            </div>
+</div>
+</div>
+<div class="mt-2">
+<h3 class="text-sm font-medium text-gray-900">Dây sạc loại C</h3>
+<div class="mt-1 flex justify-between items-center">
+<div>
+<span class="text-sm font-bold text-gray-900">10,000₫</span>
+<span class="text-xs text-gray-500 block">10,000₫</span>
+</div>
+<button class="bg-indigo-600 text-white px-2 py-1 rounded-md text-xs hover:bg-indigo-700">
+                                Thêm vào giỏ hàng
+                            </button>
+</div>
+</div>
+</div>
+<!-- Dây sạc 2 -->
+<div class="product-card bg-white p-4 rounded-lg shadow-sm border">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden">
+<img alt="Dây sạc Lightning" class="w-full h-32 object-cover" src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&amp;fit=crop&amp;w=200&amp;q=80"/>
+<div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs">
+                                Siêu rẻ
+                            </div>
+</div>
+</div>
+<div class="mt-2">
+<h3 class="text-sm font-medium text-gray-900">Dây sạc Lightning</h3>
+<div class="mt-1 flex justify-between items-center">
+<div>
+<span class="text-sm font-bold text-gray-900">9,000₫</span>
+<span class="text-xs text-gray-500 block">9,000₫</span>
+</div>
+<button class="bg-indigo-600 text-white px-2 py-1 rounded-md text-xs hover:bg-indigo-700">
+                                Thêm vào giỏ hàng
+                            </button>
+</div>
+</div>
+</div>
+<!-- Dây sạc 3 -->
+<div class="product-card bg-white p-4 rounded-lg shadow-sm border">
+<div class="relative">
+<div class="bg-indigo-50 rounded-lg overflow-hidden">
+<img alt="Dây sạc Micro USB" class="w-full h-32 object-cover" src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&amp;fit=crop&amp;w=200&amp;q=80"/>
+<div class="flex items-center">
+<div class="flex-shrink-0 bg-indigo-500 rounded-md p-2">
+<i class="fas fa-headset text-white"></i>
+</div>
+<h3 class="ml-3 text-lg font-medium text-gray-900">24/7 Support</h3>
+</div>
+<p class="mt-2 text-gray-500">
+                            Đội ngũ dịch vụ khách hàng của chúng tôi luôn sẵn sàng hỗ trợ bạn giải đáp mọi thắc mắc.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Testimonials -->
+<div class="bg-indigo-50 py-16 px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-center text-3xl font-bold text-gray-900 mb-12">What Our Customers Say</h2>
+<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+<!-- Testimonial 1 -->
+<div class="bg-white p-6 rounded-lg shadow-sm">
+<div class="flex items-center">
+<div class="flex-shrink-0">
+<img alt="Sarah Johnson" class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"/>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-gray-900">Sarah Johnson</div>
+<div class="flex mt-1">
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+</div>
+</div>
+</div>
+<div class="mt-4">
+<p class="text-sm text-gray-600">
+                            "The screen protector I bought fits my phone perfectly and was so easy to install. It's been months and still looks brand new!"
+                        </p>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="bg-white p-6 rounded-lg shadow-sm">
+<div class="flex items-center">
+<div class="flex-shrink-0">
+<img alt="Michael Chen" class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"/>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-gray-900">Michael Chen</div>
+<div class="flex mt-1">
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+</div>
+</div>
+</div>
+<div class="mt-4">
+<p class="text-sm text-gray-600">
+                            "Fast shipping and excellent customer service. The wireless charger works great and looks sleek on my desk. Highly recommend!"
+                        </p>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="bg-white p-6 rounded-lg shadow-sm">
+<div class="flex items-center">
+<div class="flex-shrink-0">
+<img alt="Emily Rodriguez" class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=688&amp;q=80"/>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-gray-900">Emily Rodriguez</div>
+<div class="flex mt-1">
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star text-yellow-400"></i>
+<i class="fas fa-star-half-alt text-yellow-400"></i>
+</div>
+</div>
+</div>
+<div class="mt-4">
+<p class="text-sm text-gray-600">
+                            "Love the case I got for my new phone! It's protective without being bulky and the color is exactly as shown. Will definitely shop here again."
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Newsletter -->
+<div class="bg-white py-16 px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto">
+<div class="text-center">
+<h2 class="text-3xl font-bold text-gray-900">Stay Updated</h2>
+<p class="mt-4 text-lg text-gray-600">
+                    Subscribe to our newsletter for the latest products, deals, and tech tips.
+                </p>
+<div class="mt-8 max-w-md mx-auto">
+<form class="sm:flex">
+<label class="sr-only" for="email-address">Email address</label>
+<input autocomplete="email" class="w-full px-5 py-3 border border-gray-300 shadow-sm placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs rounded-md" id="email-address" name="email" placeholder="Enter your email" required="" type="email"/>
+<div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
+<button class="w-full bg-indigo-600 flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">
+                                Subscribe
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-gray-800 text-white">
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div>
+<h3 class="text-sm font-semibold uppercase tracking-wider">Shop</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="text-gray-300 hover:text-white" href="#">All Products</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">Hàng mới về</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">Best Sellers</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">Ưu đãi &amp; Promotions</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-semibold uppercase tracking-wider">Support</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="text-gray-300 hover:text-white" href="#">Contact Us</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">FAQs</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">Shipping Policy</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">Returns &amp; Exchanges</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-semibold uppercase tracking-wider">Company</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="text-gray-300 hover:text-white" href="#">Giới thiệu Us</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">Blog</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">Careers</a></li>
+<li><a class="text-gray-300 hover:text-white" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-semibold uppercase tracking-wider">Connect</h3>
+<div class="mt-4 flex space-x-6">
+<a class="text-gray-300 hover:text-white" href="#">
+<i class="fab fa-facebook-f"></i>
+</a>
+<a class="text-gray-300 hover:text-white" href="#">
+<i class="fab fa-twitter"></i>
+</a>
+<a class="text-gray-300 hover:text-white" href="#">
+<i class="fab fa-instagram"></i>
+</a>
+<a class="text-gray-300 hover:text-white" href="#">
+<i class="fab fa-pinterest"></i>
+</a>
+</div>
+<div class="mt-6">
+<h4 class="text-sm font-semibold">Payment Methods</h4>
+<div class="mt-2 flex space-x-4">
+<i class="fab fa-cc-visa text-2xl"></i>
+<i class="fab fa-cc-mastercard text-2xl"></i>
+<i class="fab fa-cc-amex text-2xl"></i>
+<i class="fab fa-cc-paypal text-2xl"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+<p class="text-gray-400 text-sm">
+                    © 2023 GadgetHub. All rights reserved.
+                </p>
+<div class="mt-4 md:mt-0">
+<img alt="GadgetHub" class="h-8" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"/>
+</div>
+</div>
+</div>
+</footer>
+<!-- Toast Notification -->
+<div class="toast-notification" id="toast"></div>
+<script>
+        // Cart functionality
+        let cartItems = [];
+        let cartCount = 0;
+        const cartBadge = document.querySelector('.cart-badge');
+        const cartModal = document.getElementById('cart-modal');
+        const cartBtn = document.getElementById('cart-btn');
+        const closeCart = document.getElementById('close-cart');
+        const cartItemsContainer = document.getElementById('cart-items');
+
+        function updateCart() {
+            cartBadge.textContent = cartCount;
+            let total = 0;
+            cartItemsContainer.innerHTML = '';
+            
+            cartItems.forEach((item, index) => {
+                total += item.price;
+                cartItemsContainer.innerHTML += `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="${item.image}" alt="${item.name}" class="h-16 w-16 object-cover rounded">
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${item.name}</div>
+                                <div class="text-sm text-gray-500">${item.price.toLocaleString()}₫</div>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('cart-total').textContent = `${total.toLocaleString()}₫`;
+        }
+
+        function addToCart(button) {
+            const card = button.closest('.product-card');
+            const name = card.querySelector('h3').textContent;
+            
+            // Cập nhật cách lấy giá VND
+            let priceElement = card.querySelector('.text-lg.font-bold, .text-sm.font-bold');
+            let price = parseInt(priceElement.textContent.replace(/[^\d]/g, ''));
+            
+            const image = card.querySelector('img').src;
+            
+            cartItems.push({ name, price, image });
+            cartCount++;
+            updateCart();
+            
+            // Animation feedback
+            cartBadge.parentElement.classList.add('animate-bounce');
+            setTimeout(() => {
+                cartBadge.parentElement.classList.remove('animate-bounce');
+            }, 1000);
+            
+            // Button feedback
+            const originalText = button.textContent.trim();
+            button.textContent = 'Added!';
+            button.classList.remove('bg-indigo-600');
+            button.classList.add('bg-green-500');
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('bg-green-500');
+                button.classList.add('bg-indigo-600');
+            }, 1500);
+        }
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            cartCount--;
+            updateCart();
+        }
+
+        // Event Listeners
+        cartBtn.addEventListener('click', () => {
+            cartModal.classList.remove('hidden');
+        });
+
+        closeCart.addEventListener('click', () => {
+            cartModal.classList.add('hidden');
+        });
+
+        // Đóng modal khi clicking outside
+        cartModal.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.classList.add('hidden');
+            }
+        });
+
+        // Add to cart buttons
+        document.querySelectorAll('.product-card button').forEach(button => {
+            button.addEventListener('click', () => addToCart(button));
+        });
+
+        // Search functionality
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const searchBar = document.getElementById('search-bar');
+            searchBar.classList.toggle('hidden');
+        });
+        
+        // Thêm hàm lưu cartItems vào localStorage và chuyển đến trang thanh toán
+        document.querySelector('.bg-gray-50 button').addEventListener('click', () => {
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            window.location.href = 'tt.html';
+        });
+
+        // Biến để lưu số lượng giao dịch đã kiểm tra
+        let lastCheckedCount = 0;
+        let lastBuyer = '';
+
+        // Hàm kiểm tra API
+        async function checkNewTransactions() {
+            try {
+                // Kiểm tra số lượng giao dịch hiện tại
+                const currentResponse = await fetch('https://manhteky123-banking.hf.space/currentCK');
+                const currentData = await currentResponse.json();
+                const currentCount = currentData.count;
+
+                // Nếu có giao dịch mới
+                if (currentCount > lastCheckedCount) {
+                    // Lấy thông tin người mua gần nhất
+                    const lastResponse = await fetch('https://manhteky123-banking.hf.space/lastCK');
+                    const lastData = await lastResponse.json();
+                    
+                    // Nếu người mua mới khác với người mua cuối cùng đã thông báo
+                    if (lastData.name !== lastBuyer) {
+                        showToast(`${lastData.name} vừa mua hàng!`);
+                        lastBuyer = lastData.name;
+                    }
+                    
+                    lastCheckedCount = currentCount;
+                }
+            } catch (error) {
+                console.error('Error checking transactions:', error);
+            }
+        }
+
+        // Hàm hiển thị toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            // Ẩn toast sau 3 giây
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Kiểm tra API mỗi 2 giây
+        setInterval(checkNewTransactions, 2000);
+    </script>
+</div><script>
+document.getElementById('mobile-menu-button').addEventListener('click', function () {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+});
+</script></body>
+</html>
